@@ -67,52 +67,52 @@ As you can see, even though the error code should have been displayed in referen
 This can be better seen in action by utilizing the **-T** option. This option tells the NASL interpreter to trace its actions and print them back to either a file or to the standard output. Running the code in the previous example with the trace option set to true will result in the following content being returned by the interpreter:
 
 >`5286]() NASL> [080812b0] <- 1`
-`[5286]() NASL> [080812e0] <- 0`
-`[5286]() NASL> [08081310] <- 5`
-`[5286]() NASL> [08081348] <- 6`
-`[5286]() NASL> [08081380] <- 17`
-`[5286]() NASL> [080813b8] <- 1`
-`[5286]() NASL> [080813f0] <- 0`
-`[5286]() NASL> [08081420] <- 2`
-`[5286]() NASL> [08081458] <- 1`
-`[5286]() NASL> [08081488] <- 2`
-`[5286]() NASL> [080814c0] <- 3`
-`[5286]() NASL> [080814f8] <- 4`
-`[5286]() NASL> [08081530] <- 5`
-`[5286]() NASL> [08081568] <- 2201`
-`[5286]() NASL> [08081598] <- 1`
-`[5286]() NASL> [080815c8] <- 2`
-`[5286]() NASL> [080815f8] <- 4`
-`[5286]() NASL> [08081628] <- 8`
-`[5286]() NASL> [08081658] <- 16`
-`[5286]() NASL> [08081688] <- 32`
-`[5286]() NASL> [080816b8] <- 32768`
-`[5286]() NASL> [080816e8] <- 16384`
-`[5286]() NASL> [08081718] <- 8192`
-`[5286]() NASL> [08081748] <- 8191`
-`[5286]() NASL> [08081778] <- 0`
-`[5286]() NASL> [080817a8] <- 3`
-`[5286]() NASL> [080817e0] <- 4`
-`[5286]() NASL> [08081810] <- 5`
-`[5286]() NASL> [08081848] <- 6`
-`[5286]() NASL> [08081888] <- 7`
-`[5286]() NASL> [080818b8] <- 1`
-`[5286]() NASL> [080818f0] <- 2`
-`[5286]() NASL> [08081928] <- 8`
-`[5286]() NASL> [08081960] <- 9`
-`[5286]() NASL> [08081990] <- 10`
-`[5286]() NASL> [080819c0] <- 1`
-`[5286]() NASL> [08081a20] <- 1`
-`[5286]() NASL> [08081a58] <- 0`
-`[5286]() NASL> [08081a90] <- "beyondsecurity_sample3.nasl"
+>`[5286]() NASL> [080812e0] <- 0`
+>`[5286]() NASL> [08081310] <- 5`
+>`[5286]() NASL> [08081348] <- 6`
+>`[5286]() NASL> [08081380] <- 17`
+>`[5286]() NASL> [080813b8] <- 1`
+>`[5286]() NASL> [080813f0] <- 0`
+>`[5286]() NASL> [08081420] <- 2`
+>`[5286]() NASL> [08081458] <- 1`
+>`[5286]() NASL> [08081488] <- 2`
+>`[5286]() NASL> [080814c0] <- 3`
+>`[5286]() NASL> [080814f8] <- 4`
+>`[5286]() NASL> [08081530] <- 5`
+>`[5286]() NASL> [08081568] <- 2201`
+>`[5286]() NASL> [08081598] <- 1`
+>`[5286]() NASL> [080815c8] <- 2`
+>`[5286]() NASL> [080815f8] <- 4`
+>`[5286]() NASL> [08081628] <- 8`
+>`[5286]() NASL> [08081658] <- 16`
+>`[5286]() NASL> [08081688] <- 32`
+>`[5286]() NASL> [080816b8] <- 32768`
+>`[5286]() NASL> [080816e8] <- 16384`
+>`[5286]() NASL> [08081718] <- 8192`
+>`[5286]() NASL> [08081748] <- 8191`
+>`[5286]() NASL> [08081778] <- 0`
+>`[5286]() NASL> [080817a8] <- 3`
+>`[5286]() NASL> [080817e0] <- 4`
+>`[5286]() NASL> [08081810] <- 5`
+>`[5286]() NASL> [08081848] <- 6`
+>`[5286]() NASL> [08081888] <- 7`
+>`[5286]() NASL> [080818b8] <- 1`
+>`[5286]() NASL> [080818f0] <- 2`
+>`[5286]() NASL> [08081928] <- 8`
+>`[5286]() NASL> [08081960] <- 9`
+>`[5286]() NASL> [08081990] <- 10`
+>`[5286]() NASL> [080819c0] <- 1`
+>`[5286]() NASL> [08081a20] <- 1`
+>`[5286]() NASL> [08081a58] <- 0`
+>`[5286]() NASL> [08081a90] <- "beyondsecurity_sample3.nasl"
 NASL:0003> beyondsecurity(...)`
-`[5286]() NASL> [08081e68] <- 80`
-[`5286](beyondsecurity_sample3.nasl) NASL> Call beyondsecurity(num: 80)
+>`[5286]() NASL> [08081e68] <- 80`
+>[`5286](beyondsecurity_sample3.nasl) NASL> Call beyondsecurity(num: 80)
 NASL:0003> port=get_http_port(...);
 NASL:0003> get_http_port(...)`
-`[5286](beyondsecurity_sample3.nasl) Undefined function 'get_http_port'`
-`[5286]() NASL> [08081d60] <- undef`
-`[5286](beyondsecurity_sample3.nasl) NASL> Return beyondsecurity: FAKE`
+>`[5286](beyondsecurity_sample3.nasl) Undefined function 'get_http_port'`
+>`[5286]() NASL> [08081d60] <- undef`
+>`[5286](beyondsecurity_sample3.nasl) NASL> Return beyondsecurity: FAKE`
 
 The first parts are not relevant at the moment. What is more interesting is the part where we can actually see the script requesting the function beyondsecurity to be called with the value of 80 for its num parameter. Further, we can see the NASL interpreter looking the function get_http_port and not being able to locate it and consequently returning an error.
 
