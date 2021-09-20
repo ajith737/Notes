@@ -4,6 +4,14 @@
 1. [Initial Enumeration](#Enumeration)
 2. [Automated Tools](#Automated)
 3. [Kernel Exploits](#Kernel)
+4. [Passwords & File permissions](#Passwords)
+5. [Sudo](#Sudo)
+6. [SUID](#SUID)
+7. [Capabilities](#Capabilities)
+8. [Scheduled Task](#Sheduled)
+9. [NFS Root Squashing](#NFS)
+10. [Escalation via Docker](#Docker)
+
 
 # 1. Initial Enumeration <a name="Enumeration"></a>
 #### System Enumeration
@@ -56,7 +64,7 @@ Type `uname -a` and copy paste the result in google and check for vulnerability 
 
 Check keranal exploit and download the exploit. Run the exploit by the what is mentioned readme.
 
-# 4. Passwords & File permissions <a name="Passwords & File Permissions"></a>
+# 4. Passwords & File permissions <a name="Passwords"></a>
 
 #### Escalation via stored Passwords
 
@@ -255,7 +263,7 @@ Some common capabilities to look for:
 - openssl
 - perl
 
-# 8. Scheduled Task <a name="Sheduled Task"></a>
+# 8. Scheduled Task <a name="Sheduled"></a>
 
 #### Crons job & Systemd Timers overview
 
@@ -326,7 +334,7 @@ Just like cron path but instead of putting file in first path we can overwirte e
 
 Then run `/tmp/bash` after one minute get to root.
 
-# 9. NFS Root Squashing <a name="NFS Root Squashing"></a>
+# 9. NFS Root Squashing <a name="NFS"></a>
 
 `cat /etc/exports` then check for no root squash. That means that directory shareable and can be mounted.
 
@@ -344,7 +352,7 @@ Then `chmod +s /tmp/mountme/x`
 
 Then execute the x from target shell. `cd /sharefolder/` and `./x`. This will give root access.
 
-# 10. Escalation via Docker <a name="Escalation via Docker"></a>
+# 10. Escalation via Docker <a name="Docker"></a>
 
 First get into a low privilaged user.
 
