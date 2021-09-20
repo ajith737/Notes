@@ -91,7 +91,7 @@ Windows Kernel Exploits: https://github.com/SecWiki/windows-kernel-exploits
 - `set options`
 - `run`
 
-## 9. Manual Escalation <a name="Manual_Escalation></a>
+## 9. Manual Escalation <a name="Manual_Escalation"></a>
 - Run windows exploit suggester
 - check for exploits that can be done from the shell. For example exploits needed gui interface to spawn shell etc.
 - Enumerate and find services. Look for any vulnerabilities found with exploitdb or anything.
