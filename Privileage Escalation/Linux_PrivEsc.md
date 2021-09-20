@@ -1,4 +1,11 @@
-# 1. Initial Enumeration
+# Linux Privileage Escalation
+
+# Table of Contents
+1. [Initial Enumeration](#Enumeration)
+2. [Automated Tools](#Automated)
+3. [Kernel Exploits](#Kernel)
+
+# 1. Initial Enumeration <a name="Enumeration"></a>
 #### System Enumeration
 `hostname`
 `uname -a`
@@ -34,14 +41,14 @@
 `locate password | more` or `locate pass | more`
 `find / -name id_rsa 2> /dev/null`
 
-# 2. Automated Tools
+# 2. Automated Tools <a name="Automated"></a>
 
 - LinPEAS - Linux Privilege Escalation Awesome Script: https://github.com/carlospolop/privilege-escalation-awesome-scripts-suite/tree/master/linPEAS
 - LinEnum: https://github.com/rebootuser/LinEnum
 - LES: Linux privilege escalation auditing tool: https://github.com/mzet-/linux-exploit-suggester
 -  Python Linux Privilege Escalation Check Script: https://github.com/sleventyeleven/linuxprivchecker
 
-# 3. Kernel Exploits
+# 3. Kernel Exploits <a name="Kernel"></a>
 
 Kernel Exploits: https://github.com/lucyoa/kernel-exploits
 <break>
@@ -49,7 +56,7 @@ Type `uname -a` and copy paste the result in google and check for vulnerability 
 
 Check keranal exploit and download the exploit. Run the exploit by the what is mentioned readme.
 
-# 4. Passwords & File permissions
+# 4. Passwords & File permissions <a name="Passwords & File Permissions"></a>
 
 #### Escalation via stored Passwords
 
@@ -85,7 +92,7 @@ Look for we can acces authorized\_keys and id\_rsa:
 For example if we find id_rsa we can copy paste and try login using that: `ssh -i id_rsa root@<target_ip>`.
 
 
-# 5. Sudo
+# 5. Sudo <a name="Sudo"></a>
 
 Allow us to run command as root.
 
@@ -135,7 +142,7 @@ void init()
 [CVE-2019-18634 Github](https://github.com/saleemrashid/sudo-cve-2019-18634)
 
 
-# 6. SUID
+# 6. SUID <a name="SUID"></a>
 
 `find / -perm -u=s -type f 2>dev/null`  
 Also we can use winpeas.
@@ -223,7 +230,7 @@ If we are having direct path like '/usr/sbin/service' we can exploit this by
 - This will escalate our privileages to root. 
 
 
-# 7. Capabilities
+# 7. Capabilities <a name="Capabilities"></a>
 
 #### Capabilities overview
 
@@ -248,7 +255,7 @@ Some common capabilities to look for:
 - openssl
 - perl
 
-# 8. Scheduled Task
+# 8. Scheduled Task <a name="Sheduled Task"></a>
 
 #### Crons job & Systemd Timers overview
 
@@ -319,7 +326,7 @@ Just like cron path but instead of putting file in first path we can overwirte e
 
 Then run `/tmp/bash` after one minute get to root.
 
-# 9. NFS Root Squashing
+# 9. NFS Root Squashing <a name="NFS Root Squashing"></a>
 
 `cat /etc/exports` then check for no root squash. That means that directory shareable and can be mounted.
 
@@ -337,7 +344,7 @@ Then `chmod +s /tmp/mountme/x`
 
 Then execute the x from target shell. `cd /sharefolder/` and `./x`. This will give root access.
 
-# 10. Escalation via Docker
+# 10. Escalation via Docker <a name="Escalation via Docker"></a>
 
 First get into a low privilaged user.
 
